@@ -10,13 +10,13 @@ class ToolCallStartEvent extends AgUiEvent
         public readonly string $toolCallId,
         public readonly string $toolCallName,
         public readonly ?string $parentMessageId = null,
-        \DateTimeImmutable $timestamp = null,
+        ?\DateTimeImmutable $timestamp = null,
         /**
          * @var array<string, mixed>
          */
         array $rawEvent = []
     ) {
-        parent::__construct('ToolCallStart', $timestamp ?? new \DateTimeImmutable(), $rawEvent);
+        parent::__construct('ToolCallStart', $timestamp ?? new \DateTimeImmutable, $rawEvent);
     }
 
     /**

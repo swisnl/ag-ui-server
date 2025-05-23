@@ -10,18 +10,18 @@ namespace Swis\AgUiServer\Events;
 class TextMessageStartEvent extends AgUiEvent
 {
     /**
-     * @param Role $role
+     * @param  Role  $role
      */
     public function __construct(
         public readonly string $messageId,
         public readonly string $role = 'assistant',
-        \DateTimeImmutable $timestamp = null,
+        ?\DateTimeImmutable $timestamp = null,
         /**
          * @var array<string, mixed>
          */
         array $rawEvent = []
     ) {
-        parent::__construct('TextMessageStart', $timestamp ?? new \DateTimeImmutable(), $rawEvent);
+        parent::__construct('TextMessageStart', $timestamp ?? new \DateTimeImmutable, $rawEvent);
     }
 
     /**

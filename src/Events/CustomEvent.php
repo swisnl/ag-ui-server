@@ -9,13 +9,13 @@ class CustomEvent extends AgUiEvent
     public function __construct(
         public readonly string $name,
         public readonly mixed $value,
-        \DateTimeImmutable $timestamp = null,
+        ?\DateTimeImmutable $timestamp = null,
         /**
          * @var array<string, mixed>
          */
         array $rawEvent = []
     ) {
-        parent::__construct('Custom', $timestamp ?? new \DateTimeImmutable(), $rawEvent);
+        parent::__construct('Custom', $timestamp ?? new \DateTimeImmutable, $rawEvent);
     }
 
     /**

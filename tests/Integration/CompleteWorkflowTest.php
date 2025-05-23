@@ -17,13 +17,13 @@ class CompleteWorkflowTest extends TestCase
         $mockTransporter->method('initialize');
         $mockTransporter->method('send')
             ->willReturnCallback(function ($event) use (&$output) {
-                $output .= "data: " . $event->toJson() . "\n\n";
+                $output .= 'data: '.$event->toJson()."\n\n";
             });
 
         $state = new AgUiState($mockTransporter);
 
-        $threadId = 'thread_' . uniqid();
-        $runId = 'run_' . uniqid();
+        $threadId = 'thread_'.uniqid();
+        $runId = 'run_'.uniqid();
 
         // Complete RAG workflow
         $state->startRun($threadId, $runId);
@@ -91,13 +91,13 @@ class CompleteWorkflowTest extends TestCase
         $mockTransporter->method('initialize');
         $mockTransporter->method('send')
             ->willReturnCallback(function ($event) use (&$output) {
-                $output .= "data: " . $event->toJson() . "\n\n";
+                $output .= 'data: '.$event->toJson()."\n\n";
             });
 
         $state = new AgUiState($mockTransporter);
 
-        $threadId = 'thread_' . uniqid();
-        $runId = 'run_' . uniqid();
+        $threadId = 'thread_'.uniqid();
+        $runId = 'run_'.uniqid();
 
         $state->startRun($threadId, $runId);
         $state->startStep('processing');
@@ -114,7 +114,7 @@ class CompleteWorkflowTest extends TestCase
 
     public function test_streaming_performance(): void
     {
-        $transporter = new SseTransporter();
+        $transporter = new SseTransporter;
         $state = (new AgUiState($transporter))->withDeltaBuffering(deltaBufferThreshold: 50, deltaFlushInterval: 0.1);
 
         $buffer = '';
@@ -139,7 +139,7 @@ class CompleteWorkflowTest extends TestCase
 
         $duration = microtime(true) - $start;
         $output = ob_get_clean();
-        $output = $buffer . $output;
+        $output = $buffer.$output;
 
         // Should complete quickly due to buffering
         $this->assertLessThan(1.0, $duration, 'Streaming should be fast with buffering');

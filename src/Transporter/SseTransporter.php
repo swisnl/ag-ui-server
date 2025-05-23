@@ -19,8 +19,7 @@ class SseTransporter extends AbstractTransporter
             'Access-Control-Allow-Origin' => '*',
             'Access-Control-Allow-Headers' => 'Cache-Control',
         ]
-    ) {
-    }
+    ) {}
 
     public function initialize(): void
     {

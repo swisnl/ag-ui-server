@@ -8,13 +8,13 @@ class TextMessageEndEvent extends AgUiEvent
 {
     public function __construct(
         public readonly string $messageId,
-        \DateTimeImmutable $timestamp = null,
+        ?\DateTimeImmutable $timestamp = null,
         /**
          * @var array<string, mixed>
          */
         array $rawEvent = []
     ) {
-        parent::__construct('TextMessageEnd', $timestamp ?? new \DateTimeImmutable(), $rawEvent);
+        parent::__construct('TextMessageEnd', $timestamp ?? new \DateTimeImmutable, $rawEvent);
     }
 
     /**

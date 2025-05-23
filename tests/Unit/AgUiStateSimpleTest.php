@@ -22,7 +22,9 @@ use Swis\AgUiServer\Transporter\TransporterInterface;
 class AgUiStateSimpleTest extends TestCase
 {
     private array $sentEvents = [];
+
     private TransporterInterface $mockTransporter;
+
     private AgUiState $state;
 
     protected function setUp(): void
