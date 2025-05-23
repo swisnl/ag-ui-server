@@ -12,7 +12,7 @@ class SseTransporterSimpleTest extends TestCase
 {
     public function test_creates_with_default_headers(): void
     {
-        $transporter = new SseTransporter();
+        $transporter = new SseTransporter;
         $this->assertInstanceOf(SseTransporter::class, $transporter);
     }
 
@@ -30,14 +30,14 @@ class SseTransporterSimpleTest extends TestCase
     public function test_send_outputs_json_format(): void
     {
         $event = new TextMessageStartEvent('msg_123', 'assistant');
-        $transporter = new SseTransporter();
+        $transporter = new SseTransporter;
 
         // Capture output using a temporary stream
         $stream = fopen('php://temp', 'r+');
 
         // Override the default output behavior for testing
         ob_start();
-        echo "data: " . $event->toJson() . "\n\n";
+        echo 'data: '.$event->toJson()."\n\n";
         $output = ob_get_clean();
 
         $this->assertStringStartsWith('data: ', $output);
@@ -86,7 +86,7 @@ class SseTransporterSimpleTest extends TestCase
 
     public function test_initialize_and_close_do_not_throw(): void
     {
-        $transporter = new SseTransporter();
+        $transporter = new SseTransporter;
 
         // These should not throw exceptions
         $transporter->initialize();

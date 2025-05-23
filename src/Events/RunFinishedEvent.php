@@ -9,13 +9,13 @@ class RunFinishedEvent extends AgUiEvent
     public function __construct(
         public readonly string $threadId,
         public readonly string $runId,
-        \DateTimeImmutable $timestamp = null,
+        ?\DateTimeImmutable $timestamp = null,
         /**
          * @var array<string, mixed>
          */
         array $rawEvent = []
     ) {
-        parent::__construct('RunFinished', $timestamp ?? new \DateTimeImmutable(), $rawEvent);
+        parent::__construct('RunFinished', $timestamp ?? new \DateTimeImmutable, $rawEvent);
     }
 
     /**

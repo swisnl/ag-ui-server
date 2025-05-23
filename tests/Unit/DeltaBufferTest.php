@@ -12,6 +12,7 @@ use Swis\AgUiServer\Transporter\TransporterInterface;
 class DeltaBufferTest extends TestCase
 {
     private TransporterInterface $mockTransporter;
+
     private DeltaBuffer $deltaBuffer;
 
     protected function setUp(): void

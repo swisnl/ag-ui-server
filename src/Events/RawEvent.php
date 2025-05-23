@@ -12,13 +12,13 @@ class RawEvent extends AgUiEvent
          */
         public readonly array $event,
         public readonly ?string $source = null,
-        \DateTimeImmutable $timestamp = null,
+        ?\DateTimeImmutable $timestamp = null,
         /**
          * @var array<string, mixed>
          */
         array $rawEvent = []
     ) {
-        parent::__construct('Raw', $timestamp ?? new \DateTimeImmutable(), $rawEvent);
+        parent::__construct('Raw', $timestamp ?? new \DateTimeImmutable, $rawEvent);
     }
 
     /**

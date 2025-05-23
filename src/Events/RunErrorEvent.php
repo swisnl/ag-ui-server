@@ -9,13 +9,13 @@ class RunErrorEvent extends AgUiEvent
     public function __construct(
         public readonly string $message,
         public readonly ?string $code = null,
-        \DateTimeImmutable $timestamp = null,
+        ?\DateTimeImmutable $timestamp = null,
         /**
          * @var array<string, mixed>
          */
         array $rawEvent = []
     ) {
-        parent::__construct('RunError', $timestamp ?? new \DateTimeImmutable(), $rawEvent);
+        parent::__construct('RunError', $timestamp ?? new \DateTimeImmutable, $rawEvent);
     }
 
     /**

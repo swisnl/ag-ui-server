@@ -8,13 +8,13 @@ class ToolCallEndEvent extends AgUiEvent
 {
     public function __construct(
         public readonly string $toolCallId,
-        \DateTimeImmutable $timestamp = null,
+        ?\DateTimeImmutable $timestamp = null,
         /**
          * @var array<string, mixed>
          */
         array $rawEvent = []
     ) {
-        parent::__construct('ToolCallEnd', $timestamp ?? new \DateTimeImmutable(), $rawEvent);
+        parent::__construct('ToolCallEnd', $timestamp ?? new \DateTimeImmutable, $rawEvent);
     }
 
     /**
