@@ -1,48 +1,53 @@
 {
-    "name": ":vendor_slug/:package_slug",
-    "description": ":package_description",
+    "name": "swisnl/ag-ui-server",
+    "description": "PHP server integration for AG-UI - standardized AI agent frontend communication via Server-Sent Events",
     "keywords": [
-        ":vendor_name",
-        ":package_slug"
+        "swisnl",
+        "ag-ui"
     ],
-    "homepage": "https://github.com/:vendor_slug/:package_slug",
+    "homepage": "https://github.com/swisnl/ag-ui-server",
     "license": "MIT",
     "authors": [
         {
-            "name": ":author_name",
-            "email": "author@domain.com",
+            "name": "Joris Meijer",
+            "email": "joris@swis.nl",
             "role": "Developer"
         }
     ],
     "require": {
-        "php": "^8.4"
+        "php": "^8.2",
+        "psr/event-dispatcher": "^1.0"
     },
     "require-dev": {
-        :require_dev_testing,
-        :require_dev_codestyle,
-        "spatie/ray": "^1.28"
+        "friendsofphp/php-cs-fixer": "^3.74",
+        "phpstan/phpstan": "^2.1.11",
+        "phpunit/phpunit": "^11.5.15"
     },
     "autoload": {
         "psr-4": {
-            "VendorName\\Skeleton\\": "src"
+            "Swis\\AgUiServer\\": "src/"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "VendorName\\Skeleton\\Tests\\": "tests"
+            "Swis\\AgUiServer\\Tests\\": "tests/"
         }
     },
     "scripts": {
-        :scripts_testing,
-        :scripts_codestyle
+        "test": "vendor/bin/phpunit",
+        "test-coverage": "vendor/bin/phpunit --coverage",
+        "check-style": "vendor/bin/php-cs-fixer fix --config=.php-cs-fixer.dist.php --dry-run --allow-risky=yes",
+        "fix-style": "vendor/bin/php-cs-fixer fix --config=.php-cs-fixer.dist.php --allow-risky=yes",
+        "phpstan": "vendor/bin/phpstan analyse",
+        "lint": [
+            "vendor/bin/php-cs-fixer fix --config=.php-cs-fixer.dist.php --allow-risky=yes",
+            "vendor/bin/phpstan analyse --memory-limit=-1"
+        ]
     },
     "config": {
         "sort-packages": true,
         "allow-plugins": {
-            :plugins_testing,
             "phpstan/extension-installer": true
         }
-    },
-    "minimum-stability": "dev",
-    "prefer-stable": true
+    }
 }
