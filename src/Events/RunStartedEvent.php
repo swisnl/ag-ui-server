@@ -15,7 +15,7 @@ class RunStartedEvent extends AgUiEvent
          */
         array $rawEvent = []
     ) {
-        parent::__construct('RunStarted', $timestamp ?? new \DateTimeImmutable(), $rawEvent);
+        parent::__construct('RunStarted', $timestamp ?? new \DateTimeImmutable, $rawEvent);
     }
 
     /**

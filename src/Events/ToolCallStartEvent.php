@@ -16,7 +16,7 @@ class ToolCallStartEvent extends AgUiEvent
          */
         array $rawEvent = []
     ) {
-        parent::__construct('ToolCallStart', $timestamp ?? new \DateTimeImmutable(), $rawEvent);
+        parent::__construct('ToolCallStart', $timestamp ?? new \DateTimeImmutable, $rawEvent);
     }
 
     /**

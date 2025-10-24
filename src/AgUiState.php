@@ -499,9 +499,8 @@ class AgUiState
      *
      * Used for application-specific custom events.
      *
-     * @param string $name Name of the custom event
-     * @param mixed|null $value Value associated with the event
-     * @return void
+     * @param  string  $name  Name of the custom event
+     * @param  mixed|null  $value  Value associated with the event
      */
     public function custom(string $name, mixed $value = null): void
     {
@@ -513,9 +512,8 @@ class AgUiState
      *
      * Used to pass through events from external systems.
      *
-     * @param array<mixed> $event Original event data
-     * @param string|null $source Optional source identifier
-     * @return void
+     * @param  array<mixed>  $event  Original event data
+     * @param  string|null  $source  Optional source identifier
      */
     public function raw(array $event, ?string $source = null): void
     {
@@ -549,7 +547,7 @@ class AgUiState
      */
     protected function defaultTransporter(): SseTransporter
     {
-        $transporter = new SseTransporter();
+        $transporter = new SseTransporter;
         $transporter->initialize();
 
         return $transporter;
