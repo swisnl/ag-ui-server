@@ -4,26 +4,18 @@ declare(strict_types=1);
 
 namespace Swis\AgUiServer\Events;
 
-/**
- * @phpstan-type Role 'developer'|'system'|'assistant'|'user'|'tool'
- */
-class TextMessageStartEvent extends AgUiEvent
+class ReasoningStartEvent extends AgUiEvent
 {
-    protected string $eventName = 'TextMessageStart';
-
-    /**
-     * @param  Role  $role
-     */
     public function __construct(
         public readonly string $messageId,
-        public readonly string $role = 'assistant',
+        public readonly ?string $encryptedContent = null,
         ?\DateTimeImmutable $timestamp = null,
         /**
          * @var array<string, mixed>
          */
         array $rawEvent = []
     ) {
-        parent::__construct($this->eventName, $timestamp ?? new \DateTimeImmutable, $rawEvent);
+        parent::__construct('ReasoningStart', $timestamp ?? new \DateTimeImmutable, $rawEvent);
     }
 
     /**
@@ -33,7 +25,7 @@ class TextMessageStartEvent extends AgUiEvent
     {
         return [
             'messageId' => $this->messageId,
-            'role' => $this->role,
+            'encryptedContent' => $this->encryptedContent,
         ];
     }
 }

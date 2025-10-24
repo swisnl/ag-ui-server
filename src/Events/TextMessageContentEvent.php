@@ -6,6 +6,8 @@ namespace Swis\AgUiServer\Events;
 
 class TextMessageContentEvent extends AgUiEvent
 {
+    protected string $eventName = 'TextMessageContent';
+
     public function __construct(
         public readonly string $messageId,
         public readonly string $delta,
@@ -15,7 +17,7 @@ class TextMessageContentEvent extends AgUiEvent
          */
         array $rawEvent = []
     ) {
-        parent::__construct('TextMessageContent', $timestamp ?? new \DateTimeImmutable, $rawEvent);
+        parent::__construct($this->eventName, $timestamp ?? new \DateTimeImmutable, $rawEvent);
     }
 
     /**

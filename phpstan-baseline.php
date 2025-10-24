@@ -22,6 +22,18 @@ $ignoreErrors[] = [
     'path' => __DIR__.'/src/Events/RawEvent.php',
 ];
 $ignoreErrors[] = [
+    'message' => '#^Method Swis\\\\AgUiServer\\\\Events\\\\ReasoningEndEvent\\:\\:__construct\\(\\) has parameter \\$rawEvent with no value type specified in iterable type array\\.$#',
+    'identifier' => 'missingType.iterableValue',
+    'count' => 1,
+    'path' => __DIR__.'/src/Events/ReasoningEndEvent.php',
+];
+$ignoreErrors[] = [
+    'message' => '#^Method Swis\\\\AgUiServer\\\\Events\\\\ReasoningStartEvent\\:\\:__construct\\(\\) has parameter \\$rawEvent with no value type specified in iterable type array\\.$#',
+    'identifier' => 'missingType.iterableValue',
+    'count' => 1,
+    'path' => __DIR__.'/src/Events/ReasoningStartEvent.php',
+];
+$ignoreErrors[] = [
     'message' => '#^Method Swis\\\\AgUiServer\\\\Events\\\\RunErrorEvent\\:\\:__construct\\(\\) has parameter \\$rawEvent with no value type specified in iterable type array\\.$#',
     'identifier' => 'missingType.iterableValue',
     'count' => 1,
@@ -58,6 +70,12 @@ $ignoreErrors[] = [
     'path' => __DIR__.'/src/Events/StateDeltaEvent.php',
 ];
 $ignoreErrors[] = [
+    'message' => '#^PHPDoc tag @var does not specify variable name\\.$#',
+    'identifier' => 'varTag.noVariable',
+    'count' => 1,
+    'path' => __DIR__.'/src/Events/StateDeltaEvent.php',
+];
+$ignoreErrors[] = [
     'message' => '#^Method Swis\\\\AgUiServer\\\\Events\\\\StateSnapshotEvent\\:\\:__construct\\(\\) has parameter \\$rawEvent with no value type specified in iterable type array\\.$#',
     'identifier' => 'missingType.iterableValue',
     'count' => 1,
@@ -72,6 +90,12 @@ $ignoreErrors[] = [
 $ignoreErrors[] = [
     'message' => '#^PHPDoc tag @var above a method has no effect\\.$#',
     'identifier' => 'varTag.misplaced',
+    'count' => 1,
+    'path' => __DIR__.'/src/Events/StateSnapshotEvent.php',
+];
+$ignoreErrors[] = [
+    'message' => '#^PHPDoc tag @var does not specify variable name\\.$#',
+    'identifier' => 'varTag.noVariable',
     'count' => 1,
     'path' => __DIR__.'/src/Events/StateSnapshotEvent.php',
 ];

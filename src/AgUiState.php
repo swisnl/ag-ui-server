@@ -4,6 +4,11 @@ declare(strict_types=1);
 
 namespace Swis\AgUiServer;
 
+use Swis\AgUiServer\Events\CustomEvent;
+use Swis\AgUiServer\Events\RawEvent;
+use Swis\AgUiServer\Events\ReasoningMessageContentEvent;
+use Swis\AgUiServer\Events\ReasoningMessageEndEvent;
+use Swis\AgUiServer\Events\ReasoningMessageStartEvent;
 use Swis\AgUiServer\Events\RunErrorEvent;
 use Swis\AgUiServer\Events\RunFinishedEvent;
 use Swis\AgUiServer\Events\RunStartedEvent;
@@ -282,6 +287,129 @@ class AgUiState
     }
 
     /**
+     * Add a complete reasoningMessage with the specified content and role.
+     *
+     * @param  string|\Closure|iterable<string>  $content  The reasoningMessage content (string, closure returning content, or iterable for streaming)
+     * @param  Role  $role  The role of the reasoningMessage sender (default: 'assistant')
+     * @param  string|null  $id  Optional reasoningMessage ID (auto-generated if not provided)
+     * @return string The reasoningMessage ID
+     */
+    public function addReasoningMessage(string|\Closure|iterable $content, string $role = 'assistant', ?string $id = null): string
+    {
+        $reasoningMessageId = $id ?? 'reasoning_'.uniqid();
+
+        if ($content instanceof \Closure) {
+            $content = $content();
+        }
+
+        if (is_string($content)) {
+            $this->sendCompleteReasoningMessage($reasoningMessageId, $content, $role);
+        } elseif (is_iterable($content)) {
+            $this->streamReasoningMessageContent($reasoningMessageId, $content, $role);
+        }
+
+        return $reasoningMessageId;
+    }
+
+    /**
+     * Start a new reasoningMessage that will be built incrementally.
+     *
+     * @param  Role  $role  The role of the reasoningMessage sender (default: 'assistant')
+     * @param  string|null  $id  Optional reasoningMessage ID (auto-generated if not provided)
+     * @return string The reasoningMessage ID
+     */
+    public function startReasoningMessage(string $role = 'assistant', ?string $id = null): string
+    {
+        $reasoningMessageId = $id ?? 'reasoning_'.uniqid();
+        $this->activeMessages[$reasoningMessageId] = true;
+
+        $this->transporter->send(new ReasoningMessageStartEvent($reasoningMessageId, $role));
+
+        return $reasoningMessageId;
+    }
+
+    /**
+     * Add content delta to an active reasoningMessage.
+     *
+     * @param  string  $delta  The content delta to add
+     * @param  string|null  $reasoningMessageId  The reasoningMessage ID (uses most recent active reasoningMessage if not provided)
+     */
+    public function addReasoningMessageContent(string $delta, ?string $reasoningMessageId = null): void
+    {
+        $reasoningMessageId = $reasoningMessageId ?? $this->getMostRecentActiveMessage();
+
+        if ($reasoningMessageId === null) {
+            throw new \InvalidArgumentException('No active reasoningMessage found and no reasoningMessage ID provided');
+        }
+
+        if ($this->deltaBuffer) {
+            $this->deltaBuffer->add($reasoningMessageId, $delta);
+        } else {
+            $this->transporter->send(new ReasoningMessageContentEvent($reasoningMessageId, $delta));
+        }
+    }
+
+    /**
+     * Finish an active reasoningMessage and remove it from the active reasoningMessages list.
+     *
+     * @param  string|null  $reasoningMessageId  The reasoningMessage ID (uses most recent active reasoningMessage if not provided)
+     */
+    public function finishReasoningMessage(?string $reasoningMessageId = null): void
+    {
+        $reasoningMessageId = $reasoningMessageId ?? $this->getMostRecentActiveMessage();
+
+        if ($reasoningMessageId === null) {
+            throw new \InvalidArgumentException('No active reasoningMessage found and no reasoningMessage ID provided');
+        }
+
+        if ($this->deltaBuffer) {
+            $this->deltaBuffer->flush($reasoningMessageId);
+        }
+
+        $this->transporter->send(new ReasoningMessageEndEvent($reasoningMessageId));
+        unset($this->activeMessages[$reasoningMessageId]);
+    }
+
+    /**
+     * Send a complete reasoningMessage in a single operation.
+     *
+     * @param  string  $reasoningMessageId  The reasoningMessage ID
+     * @param  string  $content  The complete reasoningMessage content
+     * @param  Role  $role  The role of the reasoningMessage sender
+     */
+    private function sendCompleteReasoningMessage(string $reasoningMessageId, string $content, string $role): void
+    {
+        $this->transporter->send(new ReasoningMessageStartEvent($reasoningMessageId, $role));
+        $this->transporter->send(new ReasoningMessageContentEvent($reasoningMessageId, $content));
+        $this->transporter->send(new ReasoningMessageEndEvent($reasoningMessageId));
+    }
+
+    /**
+     * Stream reasoningMessage content from an iterable source.
+     *
+     * @param  string  $reasoningMessageId  The reasoningMessage ID
+     * @param  iterable<string>  $content  The iterable content source
+     * @param  Role  $role  The role of the reasoningMessage sender
+     */
+    private function streamReasoningMessageContent(string $reasoningMessageId, iterable $content, string $role): void
+    {
+        $this->transporter->send(new ReasoningMessageStartEvent($reasoningMessageId, $role));
+
+        foreach ($content as $delta) {
+            if ($this->deltaBuffer) {
+                $this->deltaBuffer->add($reasoningMessageId, (string) $delta);
+            } else {
+                $this->transporter->send(new ReasoningMessageContentEvent($reasoningMessageId, (string) $delta));
+            }
+        }
+
+        if ($this->deltaBuffer) {
+            $this->deltaBuffer->flush($reasoningMessageId);
+        }
+        $this->transporter->send(new ReasoningMessageEndEvent($reasoningMessageId));
+    }
+
+    /**
      * Add a complete tool call with the specified name and arguments.
      *
      * @param  string  $toolName  The name of the tool being called
@@ -364,6 +492,32 @@ class AgUiState
 
         $this->transporter->send(new ToolCallEndEvent($toolCallId));
         unset($this->activeToolCalls[$toolCallId]);
+    }
+
+    /**
+     * Sends a Custom event.
+     *
+     * Used for application-specific custom events.
+     *
+     * @param  string  $name  Name of the custom event
+     * @param  mixed|null  $value  Value associated with the event
+     */
+    public function custom(string $name, mixed $value = null): void
+    {
+        $this->transporter->send(new CustomEvent($name, $value));
+    }
+
+    /**
+     * Sends a Raw event.
+     *
+     * Used to pass through events from external systems.
+     *
+     * @param  array<mixed>  $event  Original event data
+     * @param  string|null  $source  Optional source identifier
+     */
+    public function raw(array $event, ?string $source = null): void
+    {
+        $this->transporter->send(new RawEvent($event, $source));
     }
 
     /**

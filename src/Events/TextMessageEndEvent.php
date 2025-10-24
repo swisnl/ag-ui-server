@@ -6,6 +6,8 @@ namespace Swis\AgUiServer\Events;
 
 class TextMessageEndEvent extends AgUiEvent
 {
+    protected string $eventName = 'TextMessageEnd';
+
     public function __construct(
         public readonly string $messageId,
         ?\DateTimeImmutable $timestamp = null,
@@ -14,7 +16,7 @@ class TextMessageEndEvent extends AgUiEvent
          */
         array $rawEvent = []
     ) {
-        parent::__construct('TextMessageEnd', $timestamp ?? new \DateTimeImmutable, $rawEvent);
+        parent::__construct($this->eventName, $timestamp ?? new \DateTimeImmutable, $rawEvent);
     }
 
     /**
