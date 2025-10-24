@@ -17,7 +17,8 @@ abstract class AgUiEvent implements StoppableEventInterface
          * @var array<string, mixed>
          */
         public readonly array $rawEvent = []
-    ) {}
+    ) {
+    }
 
     protected function toSnakeCase(string $input): string
     {

@@ -4,20 +4,18 @@ declare(strict_types=1);
 
 namespace Swis\AgUiServer\Events;
 
-class TextMessageContentEvent extends AgUiEvent
+class ReasoningStartEvent extends AgUiEvent
 {
-    protected string $eventName = 'TextMessageContent';
-
     public function __construct(
         public readonly string $messageId,
-        public readonly string $delta,
+        public readonly ?string $encryptedContent = null,
         ?\DateTimeImmutable $timestamp = null,
         /**
          * @var array<string, mixed>
          */
         array $rawEvent = []
     ) {
-        parent::__construct($this->eventName, $timestamp ?? new \DateTimeImmutable(), $rawEvent);
+        parent::__construct('ReasoningStart', $timestamp ?? new \DateTimeImmutable(), $rawEvent);
     }
 
     /**
@@ -27,7 +25,7 @@ class TextMessageContentEvent extends AgUiEvent
     {
         return [
             'messageId' => $this->messageId,
-            'delta' => $this->delta,
+            'encryptedContent' => $this->encryptedContent,
         ];
     }
 }
