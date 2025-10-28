@@ -18,6 +18,7 @@ class SseTransporter extends AbstractTransporter
             'Connection' => 'keep-alive',
             'Access-Control-Allow-Origin' => '*',
             'Access-Control-Allow-Headers' => 'Cache-Control',
+            'X-Accel-Buffering' => 'no',
         ]
     ) {}
 
@@ -55,9 +56,9 @@ class SseTransporter extends AbstractTransporter
 
     private function flush(): void
     {
+        flush();
         if (ob_get_level()) {
             ob_flush();
         }
-        flush();
     }
 }
