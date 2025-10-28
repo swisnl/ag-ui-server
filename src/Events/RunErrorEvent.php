@@ -15,7 +15,7 @@ class RunErrorEvent extends AgUiEvent
          */
         array $rawEvent = []
     ) {
-        parent::__construct('RunError', $timestamp ?? new \DateTimeImmutable(), $rawEvent);
+        parent::__construct('RunError', $timestamp ?? new \DateTimeImmutable, $rawEvent);
     }
 
     /**

@@ -15,7 +15,7 @@ class RunFinishedEvent extends AgUiEvent
          */
         array $rawEvent = []
     ) {
-        parent::__construct('RunFinished', $timestamp ?? new \DateTimeImmutable(), $rawEvent);
+        parent::__construct('RunFinished', $timestamp ?? new \DateTimeImmutable, $rawEvent);
     }
 
     /**

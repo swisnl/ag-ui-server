@@ -17,8 +17,7 @@ abstract class AgUiEvent implements StoppableEventInterface
          * @var array<string, mixed>
          */
         public readonly array $rawEvent = []
-    ) {
-    }
+    ) {}
 
     public function isPropagationStopped(): bool
     {

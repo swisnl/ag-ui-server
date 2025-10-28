@@ -498,10 +498,10 @@ class AgUiState
     /**
      * Sends a Tool Call Results event.
      *
-     * @param string $toolCallId The tool call ID
-     * @param string $content The output content of the tool
-     * @param string $role The role corresponding to the output content (usually 'assistant')
-     * @param string|null $messageId Optional parent message ID
+     * @param  string  $toolCallId  The tool call ID
+     * @param  string  $content  The output content of the tool
+     * @param  string  $role  The role corresponding to the output content (usually 'assistant')
+     * @param  string|null  $messageId  Optional parent message ID
      */
     public function toolCallResult(string $toolCallId, string $content = '', string $role = 'assistant', ?string $messageId = null): void
     {
@@ -563,7 +563,7 @@ class AgUiState
      */
     protected function defaultTransporter(): SseTransporter
     {
-        $transporter = new SseTransporter();
+        $transporter = new SseTransporter;
         $transporter->initialize();
 
         return $transporter;
