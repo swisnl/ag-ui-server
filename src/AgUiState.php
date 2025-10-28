@@ -503,7 +503,7 @@ class AgUiState
      * @param string $role The role corresponding to the output content (usually 'assistant')
      * @param string|null $messageId Optional parent message ID
      */
-    public function toolCallResult(string $toolCallId, string $content = '', string $role = 'assistant', ?string $messageId = null)
+    public function toolCallResult(string $toolCallId, string $content = '', string $role = 'assistant', ?string $messageId = null): void
     {
         $messageId = $messageId ?? $this->getMostRecentActiveMessage() ?? 'msg_unknown';
 
