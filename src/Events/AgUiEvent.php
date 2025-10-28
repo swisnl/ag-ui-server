@@ -17,13 +17,7 @@ abstract class AgUiEvent implements StoppableEventInterface
          * @var array<string, mixed>
          */
         public readonly array $rawEvent = []
-    ) {}
-
-    protected function toSnakeCase(string $input): string
-    {
-        $result = preg_replace('/(?<!^)[A-Z]/', '_$0', $input);
-
-        return strtoupper($result ?? $input);
+    ) {
     }
 
     public function isPropagationStopped(): bool
@@ -42,7 +36,7 @@ abstract class AgUiEvent implements StoppableEventInterface
     public function toArray(): array
     {
         return [
-            'type' => $this->toSnakeCase($this->type),
+            'type' => $this->type,
             'timestamp' => $this->timestamp->format(\DateTimeInterface::RFC3339_EXTENDED),
             ...$this->getEventData(),
         ];
