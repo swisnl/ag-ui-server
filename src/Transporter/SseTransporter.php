@@ -20,7 +20,8 @@ class SseTransporter extends AbstractTransporter
             'Access-Control-Allow-Headers' => 'Cache-Control',
             'X-Accel-Buffering' => 'no',
         ]
-    ) {}
+    ) {
+    }
 
     public function initialize(): void
     {

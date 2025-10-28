@@ -114,7 +114,7 @@ class CompleteWorkflowTest extends TestCase
 
     public function test_streaming_performance(): void
     {
-        $transporter = new SseTransporter;
+        $transporter = new SseTransporter();
         $state = (new AgUiState($transporter))->withDeltaBuffering(deltaBufferThreshold: 50, deltaFlushInterval: 0.1);
 
         $buffer = '';

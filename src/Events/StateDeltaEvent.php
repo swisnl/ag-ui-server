@@ -17,7 +17,7 @@ class StateDeltaEvent extends AgUiEvent
          */
         array $rawEvent = []
     ) {
-        parent::__construct('StateDelta', $timestamp ?? new \DateTimeImmutable, $rawEvent);
+        parent::__construct('StateDelta', $timestamp ?? new \DateTimeImmutable(), $rawEvent);
     }
 
     /**
