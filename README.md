@@ -306,6 +306,7 @@ class WebSocketTransporter implements TransporterInterface
 - `ToolCallStart` - Begin tool execution
 - `ToolCallArgs` - Tool arguments (can be streamed)
 - `ToolCallEnd` - Tool execution complete
+- `ToolCallResult` - Results of a Tool execution
 
 ### Lifecycle Events
 - `RunStarted` - Agent run begins

@@ -19,6 +19,7 @@ use Swis\AgUiServer\Events\TextMessageEndEvent;
 use Swis\AgUiServer\Events\TextMessageStartEvent;
 use Swis\AgUiServer\Events\ToolCallArgsEvent;
 use Swis\AgUiServer\Events\ToolCallEndEvent;
+use Swis\AgUiServer\Events\ToolCallResultEvent;
 use Swis\AgUiServer\Events\ToolCallStartEvent;
 use Swis\AgUiServer\Transporter\SseTransporter;
 use Swis\AgUiServer\Transporter\TransporterInterface;
@@ -492,6 +493,21 @@ class AgUiState
 
         $this->transporter->send(new ToolCallEndEvent($toolCallId));
         unset($this->activeToolCalls[$toolCallId]);
+    }
+
+    /**
+     * Sends a Tool Call Results event.
+     *
+     * @param string $toolCallId The tool call ID
+     * @param string $content The output content of the tool
+     * @param string $role The role corresponding to the output content (usually 'assistant')
+     * @param string|null $messageId Optional parent message ID
+     */
+    public function toolCallResult(string $toolCallId, string $content = '', string $role = 'assistant', ?string $messageId = null)
+    {
+        $messageId = $messageId ?? $this->getMostRecentActiveMessage() ?? 'msg_unknown';
+
+        $this->transporter->send(new ToolCallResultEvent($messageId, $toolCallId, $content, $role));
     }
 
     /**
