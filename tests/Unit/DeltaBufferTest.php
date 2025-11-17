@@ -26,7 +26,7 @@ class DeltaBufferTest extends TestCase
         $messageId = 'msg_123';
 
         // Should not send immediately for small content
-        $this->mockTransporter->expects($this->never())->method('send');
+        $this->mockTransporter->expects($this->never())->method('sendEvent');
 
         $this->deltaBuffer->add($messageId, 'Hello');
         $this->deltaBuffer->add($messageId, ' world');
@@ -38,7 +38,7 @@ class DeltaBufferTest extends TestCase
         $longContent = str_repeat('a', 101); // Exceeds threshold of 100
 
         $this->mockTransporter->expects($this->once())
-            ->method('send')
+            ->method('sendEvent')
             ->with($this->callback(function ($event) use ($messageId, $longContent) {
                 return $event instanceof TextMessageContentEvent
                     && $event->messageId === $messageId
@@ -58,7 +58,7 @@ class DeltaBufferTest extends TestCase
         $this->deltaBuffer->add($messageId, 'world');
 
         $this->mockTransporter->expects($this->once())
-            ->method('send')
+            ->method('sendEvent')
             ->with($this->callback(function ($event) use ($messageId) {
                 return $event instanceof TextMessageContentEvent
                     && $event->messageId === $messageId
@@ -77,7 +77,7 @@ class DeltaBufferTest extends TestCase
         $this->deltaBuffer->add($messageId2, 'Second message');
 
         $sentEvents = [];
-        $this->mockTransporter->method('send')
+        $this->mockTransporter->method('sendEvent')
             ->willReturnCallback(function ($event) use (&$sentEvents) {
                 $sentEvents[] = $event;
             });
@@ -97,14 +97,14 @@ class DeltaBufferTest extends TestCase
         $this->deltaBuffer->add('msg_1', 'Content 1');
         $this->deltaBuffer->add('msg_2', 'Content 2');
 
-        $this->mockTransporter->expects($this->exactly(2))->method('send');
+        $this->mockTransporter->expects($this->exactly(2))->method('sendEvent');
 
         $this->deltaBuffer->flushAll();
     }
 
     public function test_does_not_flush_empty_buffer(): void
     {
-        $this->mockTransporter->expects($this->never())->method('send');
+        $this->mockTransporter->expects($this->never())->method('sendEvent');
 
         $this->deltaBuffer->flush('nonexistent_message');
     }

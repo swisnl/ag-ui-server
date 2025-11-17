@@ -113,7 +113,7 @@ class AgUiState
         $this->currentThreadId = $threadId;
         $this->currentRunId = $runId;
 
-        $this->transporter->send(new RunStartedEvent($threadId, $runId));
+        $this->transporter->sendEvent(new RunStartedEvent($threadId, $runId));
     }
 
     /**
@@ -122,7 +122,7 @@ class AgUiState
     public function finishRun(): void
     {
         if ($this->currentRunId && $this->currentThreadId) {
-            $this->transporter->send(new RunFinishedEvent($this->currentThreadId, $this->currentRunId));
+            $this->transporter->sendEvent(new RunFinishedEvent($this->currentThreadId, $this->currentRunId));
         }
 
         $this->currentRunId = null;
@@ -137,7 +137,7 @@ class AgUiState
      */
     public function errorRun(string $message, ?string $code = null): void
     {
-        $this->transporter->send(new RunErrorEvent($message, $code));
+        $this->transporter->sendEvent(new RunErrorEvent($message, $code));
         $this->currentRunId = null;
         $this->currentThreadId = null;
     }
@@ -150,7 +150,7 @@ class AgUiState
     public function startStep(string $stepName): void
     {
         $this->currentStepName = $stepName;
-        $this->transporter->send(new StepStartedEvent($stepName));
+        $this->transporter->sendEvent(new StepStartedEvent($stepName));
     }
 
     /**
@@ -159,7 +159,7 @@ class AgUiState
     public function finishStep(): void
     {
         if ($this->currentStepName) {
-            $this->transporter->send(new StepFinishedEvent($this->currentStepName));
+            $this->transporter->sendEvent(new StepFinishedEvent($this->currentStepName));
             $this->currentStepName = null;
         }
     }
@@ -201,7 +201,7 @@ class AgUiState
         $messageId = $id ?? 'msg_'.uniqid();
         $this->activeMessages[$messageId] = true;
 
-        $this->transporter->send(new TextMessageStartEvent($messageId, $role));
+        $this->transporter->sendEvent(new TextMessageStartEvent($messageId, $role));
 
         return $messageId;
     }
@@ -223,7 +223,7 @@ class AgUiState
         if ($this->deltaBuffer) {
             $this->deltaBuffer->add($messageId, $delta);
         } else {
-            $this->transporter->send(new TextMessageContentEvent($messageId, $delta));
+            $this->transporter->sendEvent(new TextMessageContentEvent($messageId, $delta));
         }
     }
 
@@ -244,7 +244,7 @@ class AgUiState
             $this->deltaBuffer->flush($messageId);
         }
 
-        $this->transporter->send(new TextMessageEndEvent($messageId));
+        $this->transporter->sendEvent(new TextMessageEndEvent($messageId));
         unset($this->activeMessages[$messageId]);
     }
 
@@ -257,9 +257,9 @@ class AgUiState
      */
     private function sendCompleteMessage(string $messageId, string $content, string $role): void
     {
-        $this->transporter->send(new TextMessageStartEvent($messageId, $role));
-        $this->transporter->send(new TextMessageContentEvent($messageId, $content));
-        $this->transporter->send(new TextMessageEndEvent($messageId));
+        $this->transporter->sendEvent(new TextMessageStartEvent($messageId, $role));
+        $this->transporter->sendEvent(new TextMessageContentEvent($messageId, $content));
+        $this->transporter->sendEvent(new TextMessageEndEvent($messageId));
     }
 
     /**
@@ -271,20 +271,20 @@ class AgUiState
      */
     private function streamMessageContent(string $messageId, iterable $content, string $role): void
     {
-        $this->transporter->send(new TextMessageStartEvent($messageId, $role));
+        $this->transporter->sendEvent(new TextMessageStartEvent($messageId, $role));
 
         foreach ($content as $delta) {
             if ($this->deltaBuffer) {
                 $this->deltaBuffer->add($messageId, (string) $delta);
             } else {
-                $this->transporter->send(new TextMessageContentEvent($messageId, (string) $delta));
+                $this->transporter->sendEvent(new TextMessageContentEvent($messageId, (string) $delta));
             }
         }
 
         if ($this->deltaBuffer) {
             $this->deltaBuffer->flush($messageId);
         }
-        $this->transporter->send(new TextMessageEndEvent($messageId));
+        $this->transporter->sendEvent(new TextMessageEndEvent($messageId));
     }
 
     /**
@@ -324,7 +324,7 @@ class AgUiState
         $reasoningMessageId = $id ?? 'reasoning_'.uniqid();
         $this->activeMessages[$reasoningMessageId] = true;
 
-        $this->transporter->send(new ReasoningMessageStartEvent($reasoningMessageId, $role));
+        $this->transporter->sendEvent(new ReasoningMessageStartEvent($reasoningMessageId, $role));
 
         return $reasoningMessageId;
     }
@@ -346,7 +346,7 @@ class AgUiState
         if ($this->deltaBuffer) {
             $this->deltaBuffer->add($reasoningMessageId, $delta);
         } else {
-            $this->transporter->send(new ReasoningMessageContentEvent($reasoningMessageId, $delta));
+            $this->transporter->sendEvent(new ReasoningMessageContentEvent($reasoningMessageId, $delta));
         }
     }
 
@@ -367,7 +367,7 @@ class AgUiState
             $this->deltaBuffer->flush($reasoningMessageId);
         }
 
-        $this->transporter->send(new ReasoningMessageEndEvent($reasoningMessageId));
+        $this->transporter->sendEvent(new ReasoningMessageEndEvent($reasoningMessageId));
         unset($this->activeMessages[$reasoningMessageId]);
     }
 
@@ -380,9 +380,9 @@ class AgUiState
      */
     private function sendCompleteReasoningMessage(string $reasoningMessageId, string $content, string $role): void
     {
-        $this->transporter->send(new ReasoningMessageStartEvent($reasoningMessageId, $role));
-        $this->transporter->send(new ReasoningMessageContentEvent($reasoningMessageId, $content));
-        $this->transporter->send(new ReasoningMessageEndEvent($reasoningMessageId));
+        $this->transporter->sendEvent(new ReasoningMessageStartEvent($reasoningMessageId, $role));
+        $this->transporter->sendEvent(new ReasoningMessageContentEvent($reasoningMessageId, $content));
+        $this->transporter->sendEvent(new ReasoningMessageEndEvent($reasoningMessageId));
     }
 
     /**
@@ -394,20 +394,20 @@ class AgUiState
      */
     private function streamReasoningMessageContent(string $reasoningMessageId, iterable $content, string $role): void
     {
-        $this->transporter->send(new ReasoningMessageStartEvent($reasoningMessageId, $role));
+        $this->transporter->sendEvent(new ReasoningMessageStartEvent($reasoningMessageId, $role));
 
         foreach ($content as $delta) {
             if ($this->deltaBuffer) {
                 $this->deltaBuffer->add($reasoningMessageId, (string) $delta);
             } else {
-                $this->transporter->send(new ReasoningMessageContentEvent($reasoningMessageId, (string) $delta));
+                $this->transporter->sendEvent(new ReasoningMessageContentEvent($reasoningMessageId, (string) $delta));
             }
         }
 
         if ($this->deltaBuffer) {
             $this->deltaBuffer->flush($reasoningMessageId);
         }
-        $this->transporter->send(new ReasoningMessageEndEvent($reasoningMessageId));
+        $this->transporter->sendEvent(new ReasoningMessageEndEvent($reasoningMessageId));
     }
 
     /**
@@ -428,17 +428,17 @@ class AgUiState
             $args = $args();
         }
 
-        $this->transporter->send(new ToolCallStartEvent($toolCallId, $toolName, $parentMessageId));
+        $this->transporter->sendEvent(new ToolCallStartEvent($toolCallId, $toolName, $parentMessageId));
 
         if (is_string($args)) {
-            $this->transporter->send(new ToolCallArgsEvent($toolCallId, $args));
+            $this->transporter->sendEvent(new ToolCallArgsEvent($toolCallId, $args));
         } elseif (is_iterable($args)) {
             foreach ($args as $argsDelta) {
-                $this->transporter->send(new ToolCallArgsEvent($toolCallId, (string) $argsDelta));
+                $this->transporter->sendEvent(new ToolCallArgsEvent($toolCallId, (string) $argsDelta));
             }
         }
 
-        $this->transporter->send(new ToolCallEndEvent($toolCallId));
+        $this->transporter->sendEvent(new ToolCallEndEvent($toolCallId));
 
         return $toolCallId;
     }
@@ -456,7 +456,7 @@ class AgUiState
         $toolCallId = $id ?? 'tool_'.uniqid();
         $this->activeToolCalls[$toolCallId] = true;
 
-        $this->transporter->send(new ToolCallStartEvent($toolCallId, $toolName, $parentMessageId));
+        $this->transporter->sendEvent(new ToolCallStartEvent($toolCallId, $toolName, $parentMessageId));
 
         return $toolCallId;
     }
@@ -475,7 +475,7 @@ class AgUiState
             throw new \InvalidArgumentException('No active tool call found and no tool call ID provided');
         }
 
-        $this->transporter->send(new ToolCallArgsEvent($toolCallId, $args));
+        $this->transporter->sendEvent(new ToolCallArgsEvent($toolCallId, $args));
     }
 
     /**
@@ -491,7 +491,7 @@ class AgUiState
             throw new \InvalidArgumentException('No active tool call found and no tool call ID provided');
         }
 
-        $this->transporter->send(new ToolCallEndEvent($toolCallId));
+        $this->transporter->sendEvent(new ToolCallEndEvent($toolCallId));
         unset($this->activeToolCalls[$toolCallId]);
     }
 
@@ -507,7 +507,7 @@ class AgUiState
     {
         $messageId = $messageId ?? $this->getMostRecentActiveMessage() ?? 'msg_unknown';
 
-        $this->transporter->send(new ToolCallResultEvent($messageId, $toolCallId, $content, $role));
+        $this->transporter->sendEvent(new ToolCallResultEvent($messageId, $toolCallId, $content, $role));
     }
 
     /**
@@ -520,7 +520,7 @@ class AgUiState
      */
     public function custom(string $name, mixed $value = null): void
     {
-        $this->transporter->send(new CustomEvent($name, $value));
+        $this->transporter->sendEvent(new CustomEvent($name, $value));
     }
 
     /**
@@ -533,7 +533,7 @@ class AgUiState
      */
     public function raw(array $event, ?string $source = null): void
     {
-        $this->transporter->send(new RawEvent($event, $source));
+        $this->transporter->sendEvent(new RawEvent($event, $source));
     }
 
     /**

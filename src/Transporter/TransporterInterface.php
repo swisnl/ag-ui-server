@@ -16,7 +16,7 @@ interface TransporterInterface
     /**
      * Send an AG-UI event
      */
-    public function send(AgUiEvent $event): void;
+    public function sendEvent(AgUiEvent $event): void;
 
     /**
      * Send a comment (for keep-alive, debugging, etc.)

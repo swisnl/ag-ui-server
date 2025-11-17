@@ -32,7 +32,7 @@ class AgUiStateSimpleTest extends TestCase
         $this->sentEvents = [];
         $this->mockTransporter = $this->createMock(TransporterInterface::class);
         $this->mockTransporter->method('initialize');
-        $this->mockTransporter->method('send')
+        $this->mockTransporter->method('sendEvent')
             ->willReturnCallback(function ($event) {
                 $this->sentEvents[] = $event;
             });

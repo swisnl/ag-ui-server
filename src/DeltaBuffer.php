@@ -43,7 +43,7 @@ class DeltaBuffer
     public function flush(string $messageId): void
     {
         if (isset($this->buffers[$messageId]) && $this->buffers[$messageId] !== '') {
-            $this->transporter->send(new TextMessageContentEvent($messageId, $this->buffers[$messageId]));
+            $this->transporter->sendEvent(new TextMessageContentEvent($messageId, $this->buffers[$messageId]));
             $this->buffers[$messageId] = '';
             $this->lastFlush[$messageId] = microtime(true);
         }

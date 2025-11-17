@@ -32,7 +32,7 @@ abstract class AbstractTransporter implements TransporterInterface
 {
     protected ?EventDispatcherInterface $eventDispatcher = null;
 
-    public function send(AgUiEvent $event): void
+    public function sendEvent(AgUiEvent $event): void
     {
         $this->doSend($event);
     }
@@ -108,6 +108,6 @@ abstract class AbstractTransporter implements TransporterInterface
      */
     public function handleEvent(AgUiEvent $event): void
     {
-        $this->send($event);
+        $this->sendEvent($event);
     }
 }

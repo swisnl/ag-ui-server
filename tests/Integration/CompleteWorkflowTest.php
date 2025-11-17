@@ -15,7 +15,7 @@ class CompleteWorkflowTest extends TestCase
         $output = '';
         $mockTransporter = $this->createMock(\Swis\AgUiServer\Transporter\TransporterInterface::class);
         $mockTransporter->method('initialize');
-        $mockTransporter->method('send')
+        $mockTransporter->method('sendEvent')
             ->willReturnCallback(function ($event) use (&$output) {
                 $output .= 'data: '.$event->toJson()."\n\n";
             });
@@ -89,7 +89,7 @@ class CompleteWorkflowTest extends TestCase
         $output = '';
         $mockTransporter = $this->createMock(\Swis\AgUiServer\Transporter\TransporterInterface::class);
         $mockTransporter->method('initialize');
-        $mockTransporter->method('send')
+        $mockTransporter->method('sendEvent')
             ->willReturnCallback(function ($event) use (&$output) {
                 $output .= 'data: '.$event->toJson()."\n\n";
             });
