@@ -18,7 +18,7 @@ class RawEvent extends AgUiEvent
          */
         array $rawEvent = []
     ) {
-        parent::__construct('Raw', $timestamp ?? new \DateTimeImmutable, $rawEvent);
+        parent::__construct('Raw', $timestamp ?? new \DateTimeImmutable(), $rawEvent);
     }
 
     /**

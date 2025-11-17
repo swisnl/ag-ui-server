@@ -14,7 +14,7 @@ class StepStartedEvent extends AgUiEvent
          */
         array $rawEvent = []
     ) {
-        parent::__construct('StepStarted', $timestamp ?? new \DateTimeImmutable, $rawEvent);
+        parent::__construct('StepStarted', $timestamp ?? new \DateTimeImmutable(), $rawEvent);
     }
 
     /**
