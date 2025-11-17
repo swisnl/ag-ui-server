@@ -15,7 +15,7 @@ class CustomEvent extends AgUiEvent
          */
         array $rawEvent = []
     ) {
-        parent::__construct('Custom', $timestamp ?? new \DateTimeImmutable(), $rawEvent);
+        parent::__construct('Custom', $timestamp ?? new \DateTimeImmutable, $rawEvent);
     }
 
     /**

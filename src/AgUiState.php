@@ -563,7 +563,7 @@ class AgUiState
      */
     protected function defaultTransporter(): SseTransporter
     {
-        $transporter = new SseTransporter();
+        $transporter = new SseTransporter;
         $transporter->initialize();
 
         return $transporter;

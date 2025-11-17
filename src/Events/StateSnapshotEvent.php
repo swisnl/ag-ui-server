@@ -17,7 +17,7 @@ class StateSnapshotEvent extends AgUiEvent
          */
         array $rawEvent = []
     ) {
-        parent::__construct('StateSnapshot', $timestamp ?? new \DateTimeImmutable(), $rawEvent);
+        parent::__construct('StateSnapshot', $timestamp ?? new \DateTimeImmutable, $rawEvent);
     }
 
     /**

@@ -15,7 +15,7 @@ class ReasoningStartEvent extends AgUiEvent
          */
         array $rawEvent = []
     ) {
-        parent::__construct('ReasoningStart', $timestamp ?? new \DateTimeImmutable(), $rawEvent);
+        parent::__construct('ReasoningStart', $timestamp ?? new \DateTimeImmutable, $rawEvent);
     }
 
     /**

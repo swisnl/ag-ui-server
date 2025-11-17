@@ -18,8 +18,7 @@ class SseTransporter extends AbstractTransporter
             'Connection' => 'keep-alive',
             'X-Accel-Buffering' => 'no',
         ]
-    ) {
-    }
+    ) {}
 
     public function initialize(): void
     {
