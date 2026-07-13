@@ -12,6 +12,7 @@ use Swis\AgUiServer\Events\ReasoningMessageStartEvent;
 use Swis\AgUiServer\Events\RunErrorEvent;
 use Swis\AgUiServer\Events\RunFinishedEvent;
 use Swis\AgUiServer\Events\RunStartedEvent;
+use Swis\AgUiServer\Events\StateSnapshotEvent;
 use Swis\AgUiServer\Events\StepFinishedEvent;
 use Swis\AgUiServer\Events\StepStartedEvent;
 use Swis\AgUiServer\Events\TextMessageContentEvent;
@@ -534,6 +535,18 @@ class AgUiState
     public function raw(array $event, ?string $source = null): void
     {
         $this->transporter->sendEvent(new RawEvent($event, $source));
+    }
+
+    /**
+     * Sends State Snapshot event.
+     *
+     * Used to determine the initial state of the agent.
+     *
+     * @param  array<mixed>  $snapshot  Snapshot of the state.
+     */
+    public function stateSnapshot(array $snapshot): void
+    {
+        $this->transporter->sendEvent(new StateSnapshotEvent($snapshot));
     }
 
     /**
