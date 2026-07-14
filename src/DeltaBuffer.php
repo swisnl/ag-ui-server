@@ -23,7 +23,8 @@ class DeltaBuffer
         private readonly TransporterInterface $transporter,
         private readonly int $bufferThreshold = 100,
         private readonly float $flushInterval = 0.2
-    ) {}
+    ) {
+    }
 
     public function add(string $messageId, string $delta): void
     {

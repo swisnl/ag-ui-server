@@ -62,7 +62,7 @@ class MessagesSnapshotEvent extends AgUiEvent
          */
         array $rawEvent = []
     ) {
-        parent::__construct('MessagesSnapshot', $timestamp ?? new \DateTimeImmutable, $rawEvent);
+        parent::__construct('MessagesSnapshot', $timestamp ?? new \DateTimeImmutable(), $rawEvent);
     }
 
     /**
